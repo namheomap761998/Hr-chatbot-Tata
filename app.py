@@ -11,7 +11,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# 2. Thông tin liên hệ HR mặc định (bạn có thể sửa lại thông tin này)
+# 2. Thông tin liên hệ HR mặc định
 DEFAULT_HR_CONTACT = """
 - **Bộ phận:** Phòng Nhân sự (HR Department)
 - **Email:** hr@congty.com
@@ -98,24 +98,6 @@ def load_all_documents(uploaded_files_data):
                 
     return "\n\n".join(all_content)
 
-# Hàm tự động tìm mô hình Gemini phù hợp nhất với tài khoản
-def get_best_model():
-    try:
-        available = [
-            m.name for m in genai.list_models() 
-            if 'generateContent' in m.supported_generation_methods
-        ]
-        # Tự động ưu tiên các model mới nhất
-        for pref in ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash-latest", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]:
-            for m in available:
-                if pref in m:
-                    return m
-        if available:
-            return available[0]
-    except Exception:
-        pass
-    return "models/gemini-2.0-flash"
-
 # Tiêu đề chính trang web
 st.title("🏢 Trợ Lý Chính Sách Nội Bộ")
 st.caption("Tra cứu quy chế, chế độ phúc lợi, nghỉ phép, hợp đồng... dành cho toàn thể cán bộ nhân viên.")
@@ -173,9 +155,9 @@ QUY TẮC BẮT BUỘC KHI TRẢ LỜI:
 {hr_contact}"
 4. Luôn giữ thái độ thân thiện, lịch sự và rõ ràng với đồng nghiệp.
 """
-        model_name = get_best_model()
+        # Đã cập nhật chính xác mô hình mới nhất theo yêu cầu của Google
         model = genai.GenerativeModel(
-            model_name=model_name,
+            model_name="gemini-3.8-flash",
             system_instruction=system_instruction
         )
 
